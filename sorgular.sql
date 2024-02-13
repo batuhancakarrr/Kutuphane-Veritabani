@@ -1,3 +1,20 @@
+-- Random veri ekleme
+
+DECLARE @Counter INT = 1
+
+WHILE @Counter <= 100000
+BEGIN
+    DECLARE @BookID INT = ROUND(RAND() * (SELECT MAX(BookID) FROM Books), 0)
+    DECLARE @UserID INT = ROUND(RAND() * (SELECT MAX(UserID) FROM Users), 0)
+    DECLARE @BorrowDate DATE = DATEADD(DAY, -ROUND(RAND() * 1825, 0), GETDATE())
+    DECLARE @ReturnDate DATE = DATEADD(DAY, 15, @BorrowDate)
+
+    INSERT INTO BorrowedBooks (BookID, UserID, BorrowDate, ReturnDate)
+    VALUES (@BookID, @UserID, @BorrowDate, @ReturnDate)
+
+    SET @Counter = @Counter + 1
+END
+
 -- KitapID verildiğine o kitabı alan kişiye ait verileri getiren function
 
 create function GetBookInfo
